@@ -1,0 +1,17 @@
+{
+  "name": "good-human",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:kraftman/good-human.git",
+  "author": "Chris Tanner <me@itschr.is>",
+  "license": "MIT",
+  "dependencies": {
+    "facebook-chat-api": "1.8.0",
+    "whatsapp-web.js": "1.5.1"
+  },
+  "scripts": {
+    "fb": "node fb-test.js",
+    "fb-login": "node fb-login.js",
+    "wa": "node whatsapptest.js"
+  }
+}
