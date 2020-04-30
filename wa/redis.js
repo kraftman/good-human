@@ -34,9 +34,10 @@ const getUnknownContacts = async (ids) => {
 const saveContacts = async (contacts) => {
   for (const contact of contacts) {
     contact.gid = v4();
-    await client.hmset('wa:contact:'+contact.id, contact);
+    await client.hmset('wa:contact:' + contact.id, contact);
     await client.sadd('wa:contacts', contact.id);
-    await client.hmset('g:contacts:' + contact.gid, 'wid', contact.id);
+    await client.hset('g:wa:contacts', contact.gid, contact.id);
+    await client.hset('g:contacts:' + contact.gid, 'wid', contact.id);
   }
 }
 

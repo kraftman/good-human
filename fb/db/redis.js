@@ -19,13 +19,20 @@ const handleMessage = (err, message) => {
   //update thread last active
 }
 
-const handleThreads = async(threads) => {
-  for (const thread of threads) {
-    await client.set('fb:threadinfo:'+thread.threadID, JSON.stringify(thread));
+const getUnknownIds = async (ids) => {
+  const unknown = [];
+  for (const id of ids) {
+    const found = await client.hget('fb:contact:'+id, 'id');
+    console.log('found:', found)
+    if (!found) {
+      unknown.push(id)
+    }
   }
+  return unknown
 }
+
 
 module.exports = {
   handleMessage,
-  handleThreads,
+  getUnknownIds,
 }
