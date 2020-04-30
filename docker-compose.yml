@@ -12,9 +12,11 @@ services:
   wa:
     build: wa/
     volumes:
-      - ./wa:/usr/src/app
-      - /usr/src/app/node_modules
-    command: "yarn dev"
+      - ./wa:/app
+      - /app/node_modules
+    command: 'npm run dev'
+    cap_add:
+      - SYS_ADMIN
     links: 
       - 'redis'
   redis:

@@ -3,4 +3,4 @@ wa/node_modules
 fb/node_modules
 private/
 appstate.json
-db/
+db/dump.rdb
