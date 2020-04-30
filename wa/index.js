@@ -1,11 +1,13 @@
 const fs = require('fs');
 const { Client, Location } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
+const { handleMessage, handleThreads } = require('./redis.js');
+const threadHandler = require('./thread-handler.js');
 
 const SESSION_FILE_PATH = './wa-session.json';
 let sessionCfg;
 if (fs.existsSync(SESSION_FILE_PATH)) {
-    sessionCfg = require(SESSION_FILE_PATH);
+  sessionCfg = require(SESSION_FILE_PATH);
 }
 
 const client = new Client({ puppeteer: { headless: true }, session: sessionCfg });
@@ -15,43 +17,45 @@ const client = new Client({ puppeteer: { headless: true }, session: sessionCfg }
 client.initialize();
 
 client.on('qr', (qr) => {
-    // NOTE: This event will not be fired if a session is specified.
-    console.log('QR RECEIVED', qr);
-    qrcode.generate(qr, {small: true});
+  // NOTE: This event will not be fired if a session is specified.
+  console.log('QR RECEIVED', qr);
+  qrcode.generate(qr, {small: true});
 });
 
 
 client.on('authenticated', (session) => {
-    console.log('AUTHENTICATED', session);
-    sessionCfg=session;
-    fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), function (err) {
-        if (err) {
-            console.error(err);
-        }
-    });
+  console.log('AUTHENTICATED', session);
+  sessionCfg=session;
+  fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), function (err) {
+    if (err) {
+        console.error(err);
+    }
+  });
 });
 
 client.on('auth_failure', msg => {
-    // Fired if session restore was unsuccessfull
-    console.error('AUTHENTICATION FAILURE', msg);
+  // Fired if session restore was unsuccessfull
+  console.error('AUTHENTICATION FAILURE', msg);
 });
 
 client.on('ready', async () => {
-    console.log('READY');
-    // const chats = await client.getChats();
-    // console.log(chats)
-    // fs.writeFile('whatsapp-threads.json', JSON.stringify(chats), function (err) {
-    //     if (err) {
-    //         console.error(err);
-    //     }
-    // });
+  console.log('READY');
+  const chats = await client.getChats();
+  let unknownIds = await threadHandler.getUnknown(chats);
+  unknownIds = unknownIds.slice(0,10);
+  const newContacts = [];
+  for (const contactID of unknownIds) {
+    newContacts.push(await client.getContactById(contactID));
+  }
+  await threadHandler.saveNewContacts(newContacts);
 });
 
 client.on('message', async msg => {
+  console.log(msg);
   await handleMessage(msg)
 });
 
 
 client.on('disconnected', (reason) => {
-    console.log('Client was logged out', reason);
+  console.log('Client was logged out', reason);
 });
