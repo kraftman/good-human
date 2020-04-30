@@ -1,2 +1,6 @@
 node_modules
-private.js
+wa/node_modules
+fb/node_modules
+private/
+appstate.json
+db/

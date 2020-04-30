@@ -1,0 +1,27 @@
+version: '3'
+services:
+  fb:
+    build: fb/
+    working_dir: /usr/src/app
+    volumes:
+      - ./fb:/usr/src/app
+      - /usr/src/app/node_modules
+    command: "yarn dev"
+    links: 
+      - 'redis'
+  wa:
+    build: wa/
+    volumes:
+      - ./wa:/usr/src/app
+      - /usr/src/app/node_modules
+    command: "yarn dev"
+    links: 
+      - 'redis'
+  redis:
+    image: redis
+    volumes:
+      - ./db/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./db:/data
+    ports:
+      - "6379:6379"
+    command: "redis-server /usr/local/etc/redis/redis.conf"
