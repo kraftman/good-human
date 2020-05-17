@@ -31,6 +31,15 @@ const getUnknownIds = async (ids) => {
   return unknown
 }
 
+const saveContacts = async (contacts) => {
+  for (const contact of contacts) {
+    contact.gid = v4();
+    await client.hmset('fb:contact:' + contact.id, contact);
+    await client.sadd('fb:contacts', contact.id);
+    await client.hset('g:fb:contacts', contact.gid, contact.id);
+    await client.hset('g:contacts:' + contact.gid, 'fid', contact.id);
+  }
+}
 
 module.exports = {
   handleMessage,

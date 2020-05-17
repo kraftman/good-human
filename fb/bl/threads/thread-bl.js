@@ -1,9 +1,10 @@
 
 
 const getParticipantsFromThreads = (threads) => {
-  const ids = {}
+  let ids = []
+  console.log(threads)
   for (const thread of threads) {
-    ids.contact(thread.participantIDs);
+    ids = ids.concat(thread.participantIDs);
   }
   return ids
 }

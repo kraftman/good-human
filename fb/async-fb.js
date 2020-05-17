@@ -11,6 +11,19 @@ class fbApi {
   constructor(api) {
   }
 
+  setOptions(options) {
+    return this.api.setOptions(options);
+  };
+
+  getUserInfo(users) {
+    return new Promise((resolve, reject) => {
+      this.api.getUserInfo(users, (err, data) => {
+        if (err) return reject(err);
+        return resolve(data);
+      })
+    })
+  }
+
   init() {
     return new Promise((resolve, reject) => {
       let sessionCfg = {email, password};
