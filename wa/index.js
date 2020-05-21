@@ -3,6 +3,7 @@ const { Client, Location } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const { handleMessage, handleThreads } = require('./redis.js');
 const threadHandler = require('./thread-handler.js');
+const influx = require('./influx.js');
 
 const SESSION_FILE_PATH = './wa-session.json';
 let sessionCfg;
@@ -47,12 +48,14 @@ client.on('ready', async () => {
   for (const contactID of unknownIds) {
     newContacts.push(await client.getContactById(contactID));
   }
+  console.log('savign new contacts: ', newContacts)
   await threadHandler.saveNewContacts(newContacts);
 });
 
 client.on('message', async msg => {
   console.log(msg);
-  await handleMessage(msg)
+  await influx.writeEvents([msg]);
+  //await handleMessage(msg)
 });
 
 

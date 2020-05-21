@@ -1,0 +1,2 @@
+CREATE DATABASE "wa_events";
+CREATE SUBSCRIPTION "sub0" ON "wa_events"."autogen" DESTINATIONS ALL 'http://projection:9090'

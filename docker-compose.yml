@@ -7,7 +7,7 @@ services:
       - ./fb:/usr/src/app
       - /usr/src/app/node_modules
     command: "yarn dev"
-    links: 
+    depends_on: 
       - 'redis'
   wa:
     build: wa/
@@ -17,8 +17,11 @@ services:
     command: 'npm run dev'
     cap_add:
       - SYS_ADMIN
-    links: 
+    depends_on: 
       - 'redis'
+      - 'influx'
+      - 'chronograf'
+      - 'projection'
   redis:
     image: redis
     volumes:
@@ -27,3 +30,26 @@ services:
     ports:
       - "6379:6379"
     command: "redis-server /usr/local/etc/redis/redis.conf"
+  influx: 
+    image: influxdb
+    volumes:
+      - ./influx/init-db.iql:/docker-entrypoint-initdb.d/init-db.iql
+      - ./influx/influxdb.conf:/etc/influxdb/influxdb.conf:ro
+      - ./influx/data1:/var/lib/influxdb
+    ports: 
+      - "8086:8086"
+  chronograf:
+    image: chronograf
+    ports:
+      - 8888:8888
+    command: ['chronograf', '--influxdb-url=http://influx:8086']
+    depends_on:
+      - 'influx'
+  projection:
+    build: projection/
+    volumes:
+      - ./projection:/app
+      - /app/node_modules
+    ports: 
+      - "9090:9090"
+    command: 'yarn dev'

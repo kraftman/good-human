@@ -4,8 +4,9 @@ const getPeople = (chats) => {
   let ids = [];
   for (const chat of chats) {
     if(!chat.isGroup) {
-      console.log('not group, skipping')
-      break
+      console.log(chat)
+      ids.push(chat.id._serialized)
+      continue
     }
     // TODO: handle non group chat
     for (const part of chat.participants) {
@@ -15,9 +16,12 @@ const getPeople = (chats) => {
   return ids;
 }
 
+
 const getUnknown = async (chats) => {
   const contacts = getPeople(chats);
-  const unknown = await redis.getUnknownContacts(contacts);
+  const distinct = contacts.filter((v, i, a) => a.indexOf(v) === i); 
+
+  const unknown = await redis.getUnknownContacts(distinct);
   return unknown;
 }
 

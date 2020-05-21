@@ -9,9 +9,11 @@
     "qrcode-terminal": "0.12.0",
     "redis": "3.0.2",
     "uuid": "^8.0.0",
-    "whatsapp-web.js": "1.5.1"
+    "whatsapp-web.js": "1.5.1",
+    "influx": "5.5.1"
   },
   "scripts": {
-    "dev": "nodemon --ignore '*.json' index.js"
+    "dev": "nodemon --legacy-watch --ignore '*.json' index.js",
+    "test-influx": "nodemon --legacy-watch --ignore '*.json' scripts/ingest-test.js"
   }
 }
