@@ -53,3 +53,11 @@ services:
     ports: 
       - "9090:9090"
     command: 'yarn dev'
+  poller: 
+    build: poller/
+    volumes:
+      - ./poller:/app
+      - /app/node_modules
+    command: 'yarn dev'
+    depends_on: 
+      - 'redis'

@@ -1,0 +1,19 @@
+{
+  "name": "fb",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "async-redis": "1.1.7",
+    "uuid": "^8.0.0",
+    "nodemailer": "6.4.6",
+    "googleapis": "51.0.0"
+  },
+  "scripts": {
+    "dev": "nodemon --legacy-watch index.js",
+    "mailer": "nodemon --legacy-watch mailer.js"
+  },
+  "devDependencies": {
+    "nodemon": "2.0.3"
+  }
+}
