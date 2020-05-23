@@ -9,6 +9,7 @@ const getParticipantsFromThreads = (threads) => {
   return ids
 }
 
+
 module.exports = {
   getParticipantsFromThreads
 }

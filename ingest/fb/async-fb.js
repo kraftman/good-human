@@ -1,7 +1,11 @@
 const login = require("facebook-chat-api");
 const fs = require('fs');
 
-const { email, password } = require('./private.js');
+const messageHandler = require('./bl/message-handler.js');
+
+const email = process.env.FB_USERNAME;
+const password = process.env.FB_PASSWORD;
+console.log('username:', email, ' password: ', password)
 
 
 const SESSION_FILE_PATH = './fbstate';
@@ -53,6 +57,14 @@ class fbApi {
         return resolve(data);
       });
     })
+  }
+  listen(callback) {
+    this.api.listenMqtt((err, event) => {
+      if(err) {
+        console.log(err);
+      }
+      callback(event);
+    });
   }
 }
 

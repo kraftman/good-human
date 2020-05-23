@@ -10,6 +10,8 @@ services:
     command: "yarn dev"
     depends_on: 
       - 'redis'
+      - 'influx'
+      - 'chronograf'
   wa:
     build: wa/
     env_file: secrets.env
@@ -44,7 +46,7 @@ services:
   chronograf:
     image: chronograf
     ports:
-      - "8888"
+      - "8888:8888"
     command: ['chronograf', '--influxdb-url=http://influx:8086']
     depends_on:
       - 'influx'

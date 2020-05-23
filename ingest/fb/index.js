@@ -1,20 +1,25 @@
 
 const fbApi = require('./async-fb.js');
-const threadHandler = require('./bl/threads/thread-handler.js');
+const readyHandler = require('./bl/ready-handler.js')
+const messageHandler = require('./bl/message-handler.js');
 
 const run = async () => {
   try {
     const api = new fbApi();
     await api.init();
+    messageHandler.init();
     api.setOptions({selfListen: true})
-    const threads = await api.getThreadList(50, null, []);
-    let ids = await threadHandler.getUnknownIds(threads);
-    ids = ids.slice(0,10);
+    await readyHandler.handleReady(api);
     
-    const results = await api.getUserInfo(ids);
-    console.log(results);
-    threadHandler.saveUsers(results);
-    //asyncApi.listenMqtt(blhandleMessage);
+    const listener = async (event) => {
+      if (event.type === 'message') {
+        console.log('got message:', event)
+        await messageHandler.writeEvents([event])
+      } else {
+        console.log('ignoring event', event)
+      }
+    }
+    api.listen(listener);
   } catch (err) {
     console.log(err);
   }
