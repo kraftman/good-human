@@ -14,9 +14,10 @@ const run = async () => {
     const listener = async (event) => {
       if (event.type === 'message') {
         console.log('got message:', event)
+        await readyHandler.checkUser(api, event.senderID);
         await messageHandler.writeEvents([event])
       } else {
-        console.log('ignoring event', event)
+        //console.log('ignoring event', event)
       }
     }
     api.listen(listener);

@@ -11,7 +11,6 @@ const getUnknownIds = async (ids) => {
   const unknown = [];
   for (const id of ids) {
     const found = await client.hget('fb:contacts', id);
-    console.log('found:', found)
     if (!found) {
       unknown.push(id)
     }
@@ -23,11 +22,14 @@ const saveContacts = async (contacts) => {
   for (let [id, contact] of Object.entries(contacts)) {
     contact.id = id;
     contact.gid = v4();
+    console.log('creating new contact:', contact);
     // add to list of fb contacts
     await client.hset('fb:contacts', id, JSON.stringify(contact));
     // create new global users
     await client.sadd('g:contacts', contact.gid);
     await client.hset('g:contacts:' + contact.gid, 'fid', id);
+    const now = Math.floor((new Date() / 1000));
+    await client.hset('g:contacts:' + contact.gid, 'firstSeen', now);
   }
 }
 
