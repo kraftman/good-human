@@ -1,0 +1,22 @@
+example whatsapp message:
+ Message {
+wa_1          |   mediaKey: undefined,
+wa_1          |   id:
+wa_1          |    { fromMe: false,
+wa_1          |      remote: '447838404646@c.us',
+wa_1          |      id: '2554FF2BEF264DD8D97B300A38CD74E7',
+wa_1          |      _serialized: 'false_447838404646@c.us_2554FF2BEF264DD8D97B300A38CD74E7' },
+wa_1          |   ack: -1,
+wa_1          |   hasMedia: false,
+wa_1          |   body: 'Go ahead',
+wa_1          |   type: 'chat',
+wa_1          |   timestamp: 1590090923,
+wa_1          |   from: '447838404646@c.us',
+wa_1          |   to: '447947745935@c.us',
+wa_1          |   author: undefined,
+wa_1          |   isForwarded: false,
+wa_1          |   broadcast: false,
+wa_1          |   fromMe: false,
+wa_1          |   hasQuotedMsg: false,
+wa_1          |   location: undefined,
+wa_1          |   mentionedIds: [] }

@@ -1,50 +1,5 @@
 version: '3'
 services:
-  fb:
-    build: fb/
-    working_dir: /usr/src/app
-    volumes:
-      - ./fb:/usr/src/app
-      - /usr/src/app/node_modules
-    command: "yarn dev"
-    depends_on: 
-      - 'redis'
-  wa:
-    build: wa/
-    volumes:
-      - ./wa:/app
-      - /app/node_modules
-    command: 'npm run dev'
-    cap_add:
-      - SYS_ADMIN
-    depends_on: 
-      - 'redis'
-      - 'influx'
-      - 'chronograf'
-      - 'projection'
-  redis:
-    image: redis
-    volumes:
-      - ./db/redis.conf:/usr/local/etc/redis/redis.conf
-      - ./db:/data
-    ports:
-      - "6379:6379"
-    command: "redis-server /usr/local/etc/redis/redis.conf"
-  influx: 
-    image: influxdb
-    volumes:
-      - ./influx/init-db.iql:/docker-entrypoint-initdb.d/init-db.iql
-      - ./influx/influxdb.conf:/etc/influxdb/influxdb.conf:ro
-      - ./influx/data1:/var/lib/influxdb
-    ports: 
-      - "8086:8086"
-  chronograf:
-    image: chronograf
-    ports:
-      - 8888:8888
-    command: ['chronograf', '--influxdb-url=http://influx:8086']
-    depends_on:
-      - 'influx'
   projection:
     build: projection/
     volumes:
@@ -61,3 +16,17 @@ services:
     command: 'yarn dev'
     depends_on: 
       - 'redis'
+  api:
+    build: api/
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+    command: 'yarn dev'
+    depends_on:
+      - 'redis'
+      - 'influx'
+
+networks:
+  default:
+    external:
+      name: good-human

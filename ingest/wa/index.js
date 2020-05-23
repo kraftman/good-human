@@ -54,6 +54,7 @@ client.on('ready', async () => {
 
 client.on('message', async msg => {
   console.log(msg);
+  // TODO check the users exists and create them if not
   await influx.writeEvents([msg]);
   //await handleMessage(msg)
 });

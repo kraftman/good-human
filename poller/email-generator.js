@@ -32,6 +32,10 @@ const genEmailBody = async (people, emailData) => {
   const items = people.map(person => {
     const base =  `http://soshul.dev/email/${emailData.id}/`;
     const qp = `id=${person.id}&secret=${emailData.secret}`;
+    // add duration strings
+    // seen in person (this week/this month)
+    // spoken online (this week/this month)
+    // sleep for X
     return `<a href=${base + qp}>${person.name}</a>`;
   })
   return items
