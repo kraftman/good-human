@@ -7,23 +7,11 @@ client.on("error", function(error) {
   console.error(error);
 });
 
-const handleMessage = async (message) => {
-  const from = message.author || message.from;
-  client.zadd('wa:thread:' + message.from, JSON.stringify(message));
-  client.zadd('wa:sender:' + message.senderID);
-}
-
-const handleThreads = async (chats) => {
-  for (const chat of chats) {
-    await client.set('wa:threadinfo:' + chat.id._serialized, JSON.stringify(chat));
-  }
-}
-
 const getUnknownContacts = async (ids) => {
   const unknown = [];
   for (const id of ids) {
-    const found = await client.hget('wa:contact:'+id, 'id');
-    console.log('found:', found)
+    const found = await client.hget('wa:contacts', id.user);
+    //console.log('found:', found)
     if (!found) {
       unknown.push(id)
     }
@@ -34,16 +22,15 @@ const getUnknownContacts = async (ids) => {
 const saveContacts = async (contacts) => {
   for (const contact of contacts) {
     contact.gid = v4();
-    await client.hmset('wa:contact:' + contact.id, contact);
-    await client.sadd('wa:contacts', contact.id);
-    await client.hset('g:wa:contacts', contact.gid, contact.id);
-    await client.hset('g:contacts:' + contact.gid, 'wid', contact.id);
+    // add to list of whatsapp contacts
+    await client.hset('wa:contacts', contact.id.user, JSON.stringify(contact));
+    // create new global user
+    await client.sadd('g:contacts', contact.gid)
+    await client.hset('g:contacts:' + contact.gid, 'wid', contact.id.user);
   }
 }
 
 module.exports = {
-  handleMessage,
-  handleThreads,
   saveContacts,
   getUnknownContacts
 }

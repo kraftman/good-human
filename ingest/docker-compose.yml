@@ -23,6 +23,8 @@ services:
       - 'redis'
       - 'influx'
       - 'chronograf'
+    ports: 
+      - "9229:9229"
   redis:
     image: redis
     volumes:

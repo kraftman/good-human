@@ -1,19 +1,28 @@
-const redis = require('./redis');
 
-const getPeople = (chats) => {
+
+const getThreadUsers = (chats) => {
   let ids = [];
   for (const chat of chats) {
     if(!chat.isGroup) {
       console.log(chat)
-      ids.push(chat.id._serialized)
+      ids.push(chat.id)
       continue
     }
     // TODO: handle non group chat
     for (const part of chat.participants) {
-      ids.push(part.id._serialized);
+      ids.push(part.id);
     }
   }
   return ids;
+}
+
+const getUserInfo = async (client, contactIds) => {
+  const promises = []
+  for (const contact of contactIds) {
+    console.log('getting user info', contact._serialized)
+    promises.push( client.getContactById(contact._serialized));
+  }
+  return Promise.all(promises);
 }
 
 
@@ -40,6 +49,6 @@ const saveNewContacts = async (contacts) => {
 }
 
 module.exports = {
-  getUnknown,
-  saveNewContacts,
+  getThreadUsers,
+  getUserInfo
 }
