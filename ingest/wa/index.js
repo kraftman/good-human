@@ -45,7 +45,9 @@ client.on('ready', async () => {
   await readyHandler.handleReady(client)
 });
 
-client.on('message', messageHandler.handleMessage);
+client.on('message', async (msg) => {
+  await messageHandler.handleMessage(client, msg) 
+});
 
 
 client.on('disconnected', (reason) => {

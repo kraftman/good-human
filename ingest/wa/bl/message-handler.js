@@ -10,7 +10,7 @@ const _checkExisting = async (msg) => {
   console.log('savign new contacts: ', newContacts)
   await redis.saveContacts(newContacts);
 }
-const handleMessage = async (msg) => {
+const handleMessage = async (client, msg) => {
   console.log(msg);
   await _checkExisting(client, msg);
   await influx.writeEvents([msg]);
