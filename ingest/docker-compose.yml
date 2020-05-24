@@ -7,7 +7,7 @@ services:
     volumes:
       - ./fb:/usr/src/app
       - /usr/src/app/node_modules
-    command: "yarn dev"
+    command: "yarn start"
     depends_on: 
       - 'redis'
       - 'influx'
@@ -18,7 +18,7 @@ services:
     volumes:
       - ./wa:/app
       - /app/node_modules
-    command: 'npm run dev'
+    command: 'yarn start'
     cap_add:
       - SYS_ADMIN
     depends_on: 
