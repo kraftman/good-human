@@ -1,5 +1,12 @@
 const login = require("facebook-chat-api");
 const fs = require('fs');
+const readline = require("readline");
+
+
+var rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 
 const messageHandler = require('./bl/message-handler.js');
 
@@ -37,14 +44,25 @@ class fbApi {
       } 
       
       login(sessionCfg, (err, api) => {
-        if(err) return reject(err);
-        // check error, remove file if its bad pass
-      
-        if (!fileExists) {
-          fs.writeFileSync('./fbstate', JSON.stringify(api.getAppState()));
+        //console.log('api callback', err, api);
+        if (err && err.error === 'login-approval') {
+          console.log('Enter code > ');
+          rl.on('line', (line) => {
+              err.continue(line);
+              rl.close();
+              //return resolve();
+          });
+        } else {
+          
+          if(err) return reject(err);
+          // check error, remove file if its bad pass
+        
+          if (!fileExists) {
+            fs.writeFileSync('./fbstate', JSON.stringify(api.getAppState()));
+          }
+          this.api = api;
+          return resolve();
         }
-        this.api = api;
-        return resolve();
       });
     })
   };
