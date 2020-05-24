@@ -8,7 +8,7 @@ const _checkExisting = async (client, msg) => {
   const newContacts = await utils.getUserInfo(unknownIds);
   
   console.log('savign new contacts: ', newContacts)
-  await redis.saveNewContacts(newContacts);
+  await redis.saveContacts(newContacts);
 }
 const handleMessage = async (client, msg) => {
   console.log(msg);
