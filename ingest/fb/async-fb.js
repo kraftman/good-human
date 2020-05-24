@@ -53,8 +53,11 @@ class fbApi {
               //return resolve();
           });
         } else {
-          
-          if(err) return reject(err);
+          console.log('here: ', err, api)
+          if(err) {
+            console.error(err)
+            return reject(err)
+          };
           // check error, remove file if its bad pass
         
           if (!fileExists) {
