@@ -4,7 +4,7 @@ const redis = require('../db/redis');
 const utils = require('./bl-utils');
 
 const _checkExisting = async (client, msg) => {
-  const unknownIds = await redis.getUnknownContacts([ msg.id.remote ]);
+  const unknownIds = await redis.getUnknownContacts([ { _serialized: msg.id.remote } ]);
   console.log('unkown:', unknownIds)
   if (!unknownIds[0]) {
     return
