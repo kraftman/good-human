@@ -19,34 +19,33 @@ const getThreadUsers = (chats) => {
 const getUserInfo = async (client, contactIds) => {
   const promises = []
   for (const contact of contactIds) {
-    console.log('getting user info', contact._serialized)
     promises.push( client.getContactById(contact._serialized));
   }
   return Promise.all(promises);
 }
 
 
-const getUnknown = async (chats) => {
-  const contacts = getPeople(chats);
-  const distinct = contacts.filter((v, i, a) => a.indexOf(v) === i); 
+// const getUnknown = async (chats) => {
+//   const contacts = getPeople(chats);
+//   const distinct = contacts.filter((v, i, a) => a.indexOf(v) === i); 
 
-  const unknown = await redis.getUnknownContacts(distinct);
-  return unknown;
-}
+//   const unknown = await redis.getUnknownContacts(distinct);
+//   return unknown;
+// }
 
 
-const convertToDbContact = (contact) => {
-  return {
-    id: contact.id._serialized,
-    name: contact.name,
-    pushname: contact.pushname,
-    number: contact.number,
-  }
-}
-const saveNewContacts = async (contacts) => {
-  const converted = contacts.map(convertToDbContact);
-  await redis.saveContacts(converted);
-}
+// const convertToDbContact = (contact) => {
+//   return {
+//     id: contact.id._serialized,
+//     name: contact.name,
+//     pushname: contact.pushname,
+//     number: contact.number,
+//   }
+// }
+// const saveNewContacts = async (contacts) => {
+//   const converted = contacts.map(convertToDbContact);
+//   await redis.saveContacts(converted);
+// }
 
 module.exports = {
   getThreadUsers,

@@ -10,7 +10,7 @@ client.on("error", function(error) {
 const getUnknownContacts = async (ids) => {
   const unknown = [];
   for (const id of ids) {
-    const found = await client.hget('wa:contacts', id.user);
+    const found = await client.hget('wa:contacts', id._serialized);
     //console.log('found:', found)
     if (!found) {
       unknown.push(id)
@@ -23,10 +23,10 @@ const saveContacts = async (contacts) => {
   for (const contact of contacts) {
     contact.gid = v4();
     // add to list of whatsapp contacts
-    await client.hset('wa:contacts', contact.id.user, JSON.stringify(contact));
+    await client.hset('wa:contacts', contact.id._serialized, JSON.stringify(contact));
     // create new global user
     await client.sadd('g:contacts', contact.gid)
-    await client.hset('g:contacts:' + contact.gid, 'wid', contact.id.user);
+    await client.hset('g:contacts:' + contact.gid, 'wid', contact.id._serialized);
   }
 }
 

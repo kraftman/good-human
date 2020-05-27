@@ -15,6 +15,7 @@
     "dev": "nodemon --legacy-watch --ignore '*.json' index.js",
     "start": "node index.js",
     "dev-debug": "nodemon --inspect-brk=0.0.0.0:9229 --legacy-watch --ignore '*.json' index.js",
-    "test-influx": "nodemon --legacy-watch --ignore '*.json' scripts/ingest-test.js"
+    "test-influx": "nodemon --legacy-watch --ignore '*.json' scripts/ingest-test.js",
+    "test-msg": "nodemon --legacy-watch --ignore '*.json' scripts/msg-test.js"
   }
 }
