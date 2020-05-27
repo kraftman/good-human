@@ -30,8 +30,6 @@ services:
     volumes:
       - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
       - ./redis:/data
-    ports:
-      - "6379"
     command: "redis-server /usr/local/etc/redis/redis.conf"
   influx: 
     image: influxdb
@@ -39,12 +37,8 @@ services:
       - ./influx/init-db.iql:/docker-entrypoint-initdb.d/init-db.iql
       - ./influx/influxdb.conf:/etc/influxdb/influxdb.conf:ro
       - ./influx/data1:/var/lib/influxdb
-    ports: 
-      - "8086"
   chronograf:
     image: chronograf
-    ports:
-      - "8888"
     command: ['chronograf', '--influxdb-url=http://influx:8086']
     depends_on:
       - 'influx'
