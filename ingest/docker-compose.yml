@@ -28,8 +28,8 @@ services:
   redis:
     image: redis
     volumes:
-      - ./db/redis.conf:/usr/local/etc/redis/redis.conf
-      - ./db:/data
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis:/data
     ports:
       - "6379"
     command: "redis-server /usr/local/etc/redis/redis.conf"
